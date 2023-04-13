@@ -92,9 +92,9 @@ $sidebar-width: 270px;
 main {
   margin-top: $navbar-height;
 
-  @include media-breakpoint-up(md) {
+  /*@include media-breakpoint-up(md) {
     margin-left: $sidebar-width;
-  }
+  }*/
 }
 
 .sidebar {

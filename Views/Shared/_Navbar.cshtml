@@ -2,7 +2,7 @@
   <div class="container-fluid">
 
     <div class="navbar-nav align-items-center">
-      <a class="nav-link d-md-none" href="#" role="button" data-bs-toggle="offcanvas" data-bs-target="#menu"><span data-feather="menu"></span></a>
+      @*<a class="nav-link d-md-none" href="#" role="button" data-bs-toggle="offcanvas" data-bs-target="#menu"><span data-feather="menu"></span></a>*@
       <a href="/" class="mx-2"><img src="~/logo.png" height="32" alt="logo" /></a>
     </div>
 
@@ -15,9 +15,9 @@
 
       @await Component.InvokeAsync("Notifications", new { unread = true })
 
-      <button class="btn btn-icon" type="button" data-bs-toggle="offcanvas" data-bs-target="#messenger"><span data-feather="message-square"></span><span id="messenger-badge" class="badge bg-danger"></span></button>
+      @*<button class="btn btn-icon" type="button" data-bs-toggle="offcanvas" data-bs-target="#messenger"><span data-feather="message-square"></span><span id="messenger-badge" class="badge bg-danger"></span></button>*@
 
-      <div class="dropdown ms-2">
+      @*<div class="dropdown ms-2">
         <a class="btn btn-icon" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><avatar for="@User" size="32" /></a>
         <div class="dropdown-menu dropdown-menu-end">
           <div class="text-center pt-4 pb-3">
@@ -31,7 +31,7 @@
             <a class="btn btn-secondary" asp-action="logout" asp-controller="users"><span data-feather="log-out"></span> Sign out</a>
           </div>
         </div>
-      </div>
+      </div>*@
 
     </div>
 

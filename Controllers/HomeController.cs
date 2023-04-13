@@ -7,23 +7,37 @@ namespace Acme.Controllers;
 
 [Authorize]
 [Route("")]
-public class HomeController : Controller {
+public class HomeController : Controller
+{
 
     private readonly WeavyClient _weavy;
 
-    public HomeController(WeavyClient weavy) {
+    public HomeController(WeavyClient weavy)
+    {
         _weavy = weavy;
     }
 
     [HttpGet("")]
-    public IActionResult Index() {
-        return View();
+    public async Task<IActionResult> Index()
+    {
+        // init Weavy posts app and ensure authenticated user is member
+        var app = new AppModel
+        {
+            Type = "posts",
+            Uid = "acme_feed",
+            Name = "Feed",
+        };
+        var model = await _weavy.InitApp(app, User);
+        return View("App", model);
+        //return View();
     }
 
     [HttpGet("chat")]
-    public async Task<IActionResult> Chat() {
+    public async Task<IActionResult> Chat()
+    {
         // init Weavy chat app and ensure authenticated user is member
-        var app = new AppModel {
+        var app = new AppModel
+        {
             Type = "chat",
             Uid = "acme_chat",
             Name = "Chat",
@@ -33,9 +47,11 @@ public class HomeController : Controller {
     }
 
     [HttpGet("files")]
-    public async Task<IActionResult> Files() {
+    public async Task<IActionResult> Files()
+    {
         // init Weavy files app and ensure authenticated user is member
-        var app = new AppModel {
+        var app = new AppModel
+        {
             Type = "files",
             Uid = "acme_files",
             Name = "Files",
@@ -45,9 +61,11 @@ public class HomeController : Controller {
     }
 
     [HttpGet("feed")]
-    public async Task<IActionResult> Feed() {
+    public async Task<IActionResult> Feed()
+    {
         // init Weavy posts app and ensure authenticated user is member
-        var app = new AppModel {
+        var app = new AppModel
+        {
             Type = "posts",
             Uid = "acme_feed",
             Name = "Feed",
@@ -58,9 +76,11 @@ public class HomeController : Controller {
 
 
     [HttpGet("message")]
-    public async Task<IActionResult> Message() {
+    public async Task<IActionResult> Message()
+    {
         // init Weavy chat app and ensure authenticated user is member
-        var app = new AppModel {
+        var app = new AppModel
+        {
             Type = "chat",
             Uid = "acme_chat",
             Name = "Chat",
