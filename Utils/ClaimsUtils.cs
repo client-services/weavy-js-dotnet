@@ -95,6 +95,7 @@ public static class ClaimsUtils
         identity.AddClaim(new Claim(ISS_CLAIM, ISSUER, null, ISSUER));
         identity.AddClaim(new Claim(SUB_CLAIM, user.UserId.ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer, ISSUER));
         identity.AddClaim(new Claim(GUID_CLAIM, user.Uid, null, GUID_CLAIM));
+        
         if (!string.IsNullOrWhiteSpace(user.Name))
         {
             identity.AddClaim(new Claim(NAME_CLAIM, user.Name, null, ISSUER));
