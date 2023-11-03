@@ -1,9 +1,9 @@
 @inject IOptions<WeavyOptions> options
-@inject UserAccessor ua
+@*@inject UserAccessor ua
 @{
   // get application user
   var user = await ua.GetUserAsync();
-}
+}*@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 <head>
@@ -36,7 +36,7 @@
   <script>
     const weavy_url = '@options.Value.Server';
     const user_timezone = @{
-      WriteLiteral(user.TimeZone != null ? "'" + user.TimeZone + "'" : "null");
+      WriteLiteral("null");
     };
   </script>
   <script src="~/weavy.js" asp-append-version="true"></script>

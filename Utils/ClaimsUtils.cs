@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Acme.Data;
+using Acme.Http;
 using Acme.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,8 @@ namespace Acme.Utils;
 /// <summary>
 /// Provides helper methods for calculating and verifying hash values.
 /// </summary>
-public static class ClaimsUtils {
+public static class ClaimsUtils
+{
 
     /// <summary>
     /// Name of the administrators role (for role based security).
@@ -44,8 +46,10 @@ public static class ClaimsUtils {
     /// </summary>
     /// <param name="user">The user for which to create a <see cref="ClaimsPrincipal"/> object.</param>
     /// <param name="authenticationType">The type of authentication used, <c>null</c> or empty string to create an identity that is not authenticated.</param>
-    public static ClaimsPrincipal CreatePrincipal(this User user, string authenticationType) {
-        if (user == null) {
+    public static ClaimsPrincipal CreatePrincipal(this User user, string authenticationType)
+    {
+        if (user == null)
+        {
             throw new ArgumentNullException(nameof(user));
         }
 
@@ -53,19 +57,58 @@ public static class ClaimsUtils {
         identity.AddClaim(new Claim(ISS_CLAIM, ISSUER, null, ISSUER));
         identity.AddClaim(new Claim(SUB_CLAIM, user.Id.ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer, ISSUER));
         identity.AddClaim(new Claim(GUID_CLAIM, user.Guid.ToString(), null, GUID_CLAIM));
-        if (!string.IsNullOrWhiteSpace(user.Name)) {
+        if (!string.IsNullOrWhiteSpace(user.Name))
+        {
             identity.AddClaim(new Claim(NAME_CLAIM, user.Name, null, ISSUER));
         }
-        if (!string.IsNullOrWhiteSpace(user.Username)) {
+        if (!string.IsNullOrWhiteSpace(user.Username))
+        {
             identity.AddClaim(new Claim(USERNAME_CLAIM, user.Username, null, ISSUER));
         }
-        if (!string.IsNullOrWhiteSpace(user.Email)) {
+        if (!string.IsNullOrWhiteSpace(user.Email))
+        {
             identity.AddClaim(new Claim(EMAIL_CLAIM, user.Email, null, ISSUER));
         }
-        if (user.IsAdmin) {
+        if (user.IsAdmin)
+        {
             identity.AddClaim(new Claim(ROLE_CLAIM, ADMIN_ROLE, ClaimValueTypes.Boolean, ISSUER));
         }
 
+        var principal = new ClaimsPrincipal(identity);
+        return principal;
+    }
+
+
+    /// <summary>
+    /// Create a <see cref="ClaimsPrincipal"/> for the specified <see cref="User"/>.
+    /// </summary>
+    /// <param name="user">The user for which to create a <see cref="ClaimsPrincipal"/> object.</param>
+    /// <param name="authenticationType">The type of authentication used, <c>null</c> or empty string to create an identity that is not authenticated.</param>
+    public static ClaimsPrincipal CreatePrincipal(this UserModel user, string authenticationType)
+    {
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+
+        var identity = new ClaimsIdentity(authenticationType, USERNAME_CLAIM, ROLE_CLAIM);
+        identity.AddClaim(new Claim(ISS_CLAIM, ISSUER, null, ISSUER));
+        identity.AddClaim(new Claim(SUB_CLAIM, user.UserId.ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer, ISSUER));
+        identity.AddClaim(new Claim(GUID_CLAIM, user.Uid, null, GUID_CLAIM));
+        if (!string.IsNullOrWhiteSpace(user.Name))
+        {
+            identity.AddClaim(new Claim(NAME_CLAIM, user.Name, null, ISSUER));
+        }
+        if (!string.IsNullOrWhiteSpace(user.Username))
+        {
+            identity.AddClaim(new Claim(USERNAME_CLAIM, user.Username, null, ISSUER));
+        }
+        if (!string.IsNullOrWhiteSpace(user.Email))
+        {
+            identity.AddClaim(new Claim(EMAIL_CLAIM, user.Email, null, ISSUER));
+        }
+        identity.AddClaim(new Claim("productid", user.ProductId.ToString(), null, ISSUER));
+        identity.AddClaim(new Claim("tenantid", user.TenantId.ToString(), null, ISSUER));
         var principal = new ClaimsPrincipal(identity);
         return principal;
     }
@@ -83,6 +126,10 @@ public static class ClaimsUtils {
     /// <param name="user"></param>
     /// <returns></returns>
     public static string Guid(this ClaimsPrincipal user) => user.FindFirstValue(GUID_CLAIM);
+
+    public static string TenantId(this ClaimsPrincipal user) => user.FindFirstValue("tenantid");
+
+    public static string ProductId(this ClaimsPrincipal user) => user.FindFirstValue("productid");
 
     /// <summary>
     /// Gets the value of the <see cref="NAME_CLAIM"/>.

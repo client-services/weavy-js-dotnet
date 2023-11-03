@@ -5,8 +5,8 @@ namespace Acme.Http;
 /// <summary>
 /// Input model for creating/updating weavy users.
 /// </summary>
-public class UserModel  {
-
+public class UserModel
+{
     public string Uid { get; set; }
 
     public string Name { get; set; }
@@ -24,4 +24,22 @@ public class UserModel  {
     public string[] Tags { get; set; }
 
     public bool IsSuspended { get; set; }
+
+    public int UserId { get; set; }
+
+    public string Username { get; set; }
+
+    public string ProductId { get; set; }
+
+    public long TenantId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the path where to redirect after successful sign-in.
+    /// </summary>
+    public string Path { get; set; }
+
+    /// <summary>
+    /// Gets or sets the preferred time zone for date/time formatting.
+    /// </summary>
+    public string TimeZone { get; set; }
 }
